@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+    db:
+        container_name: 'postgres'
+        image: postgres:11
+        environment:
+            DB_HOST: 'localhost'
+            POSTGRES_DB: 'calhas_dois_irmaos'
+            POSTGRES_USER: 'postgres'
+            POSTGRES_PASSWORD: 'postgres'
+        ports:
+            - '5432:5432'
+        restart: 'always'
+    app:
+        build: .
+        ports:
+            - 3333:3333
+            - 9229:9229
+        image: app
+        command: >
+            sh -c "npm install -g sequelize-cli &&
+                   npx sequelize db:migrate &&
+                   npx sequelize db:seed:all &&
+                   yarn dev:debug"
+        volumes:
+            - .:/usr/app
+        depends_on:
+            - db
