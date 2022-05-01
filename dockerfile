@@ -4,6 +4,7 @@ WORKDIR /usr/app
 
 COPY package.json yarn.lock ./
 
+# only production
 # RUN yarn install --production=true
 RUN yarn
 
